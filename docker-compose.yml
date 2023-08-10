@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  mariadb:
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=ultimaps
+      - MYSQL_USER=ultimaps
+      - MYSQL_PASSWORD=password
+    volumes:
+      - ./db_data:/var/lib/mysql
+    build:
+      context: .
+      dockerfile: Dockerfile      
+    healthcheck:
+      test: ["CMD-SHELL", "mysql --user=root --password=$${MYSQL_ROOT_PASSWORD} --execute='SELECT 1;'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
